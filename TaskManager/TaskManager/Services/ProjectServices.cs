@@ -1,6 +1,6 @@
 ﻿using Contracts.DTOs;
-using Percistance.Context;
-using Percistance.Models;
+using Persistence.Context;
+using Persistence.Models;
 
 namespace TaskManager.Services;
 

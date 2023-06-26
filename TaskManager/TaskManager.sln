@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager", "TaskManager\TaskManager.csproj", "{A7C65151-5F3D-4BA2-BED3-889DB6EEEE1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Percistance", "Percistance\Percistance.csproj", "{CA64DE1A-287B-4254-9B4E-455AB0595452}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{CA64DE1A-287B-4254-9B4E-455AB0595452}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{766A3090-D480-49F8-BD5F-C2A1D09B32C8}"
 EndProject
