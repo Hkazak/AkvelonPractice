@@ -1,6 +1,6 @@
 using Contracts.DTOs;
 using Microsoft.EntityFrameworkCore;
-using Percistance.Context;
+using Persistence.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,3 @@
 ﻿namespace Contracts.DTOs;
 
-public class UserDTO
-{
-    
-}
+public record UserDTO (Guid UserId, string UserName, string UserSureName, string UserPassword );
