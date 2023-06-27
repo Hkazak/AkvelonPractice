@@ -1,7 +1,7 @@
 ﻿using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Persistence.Models;
-using Task = Persistence.Models.Task;
 
 namespace Persistence.Context
 {
