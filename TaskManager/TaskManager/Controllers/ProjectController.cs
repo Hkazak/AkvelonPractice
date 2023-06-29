@@ -73,7 +73,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<Project>> GetAllProjects()
+    public ActionResult<List<ProjectResponses>> GetAllProjects()
     {
         var result = _context.Projects.ToList();
         var response = new List<ProjectResponses>();

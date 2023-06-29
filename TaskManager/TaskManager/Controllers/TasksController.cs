@@ -79,7 +79,7 @@ public class TasksController : ControllerBase
         return Ok(task);
     }
 
-    [HttpGet] public ActionResult<List<Task>> GetAllTasks()
+    [HttpGet] public ActionResult<List<TaskResponses>> GetAllTasks()
     {
         var result = _context.Tasks.Include(x => x.Project).ToList();
         var response = new List<TaskResponses>();
