@@ -20,9 +20,6 @@ namespace Persistence.Context
 
         }
 
-        public async Task<int> SaveChangesAsync()
-        {
-            return await base.SaveChangesAsync();
-        }
+  
     }
 }

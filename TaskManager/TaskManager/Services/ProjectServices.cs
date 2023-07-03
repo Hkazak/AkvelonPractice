@@ -1,33 +1,41 @@
 ﻿using Contracts.DTOs;
+using Contracts.Responses;
 using Persistence.Context;
 using Persistence.Models;
 
 namespace TaskManager.Services;
 
-public class TaskManagerServices
+public class ProjectServices
 {
     private readonly TaskManagerContext _context;
 
-    public TaskManagerServices(TaskManagerContext context)
+    public ProjectServices(TaskManagerContext context)
     {
         _context = context;
     }
 
-    public async Task<Project> CreateProject(ProjectDTO dto)
+    public async Task<ProjectResponses> CreateProjectAsync(ProjectDTO dto)
     {
-        if (string.IsNullOrEmpty(dto.ProjectName))
+        var project = new Project
         {
-            throw new NullReferenceException();
-        }
-
-        var newProject = new Project
-        {
-            ProjectId = Guid.NewGuid(),
-            ProjectName = dto.ProjectName
+            ProjectName = dto.ProjectName,
+            ProjectStartDate = dto.ProjectStartDate,
+            ProjectEndDate = dto.ProjectEndDate,
+            ProjectPriority = dto.ProjectPriority,
+            ProjectStatus = Enum.Parse<ProjectStatus>(dto.ProjectStatus)
         };
-        await _context.Projects.AddAsync(newProject);
+        _context.Projects.Add(project);
         await _context.SaveChangesAsync();
-        return newProject;
+        var response = new ProjectResponses
+        {
+            ProjectId = project.ProjectId,
+            ProjectName = project.ProjectName,
+            ProjectStartDate = project.ProjectStartDate,
+            ProjectEndDate = project.ProjectEndDate,
+            ProjectPriority = project.ProjectPriority,
+            ProjectStatus = project.ProjectStatus.ToString()
+        };
+        return response;
     }
     
     

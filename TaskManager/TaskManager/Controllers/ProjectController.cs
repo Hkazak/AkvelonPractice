@@ -3,6 +3,7 @@ using Contracts.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Context;
 using Persistence.Models;
+using TaskManager.Services;
 
 namespace TaskManager.Controllers;
 
@@ -11,34 +12,18 @@ namespace TaskManager.Controllers;
 public class ProjectController : ControllerBase
 {   
      private readonly TaskManagerContext _context;
+     private readonly ProjectServices _projectServices;
 
-    public ProjectController(TaskManagerContext context)
+     public ProjectController(TaskManagerContext context, ProjectServices projectServices)
+     {
+         _context = context;
+         _projectServices = projectServices;
+     }
+     
+     [HttpPost]
+    public async Task<ActionResult> CreateProject([FromBody] ProjectDTO dto)
     {
-        _context = context;
-    }
-
-    [HttpPost]
-    public ActionResult CreateProject([FromBody] ProjectDTO dto)
-    {
-        var project = new Project
-        {
-            ProjectName = dto.ProjectName,
-            ProjectStartDate = dto.ProjectStartDate,
-            ProjectEndDate = dto.ProjectEndDate,
-            ProjectPriority = dto.ProjectPriority,
-            ProjectStatus = Enum.Parse<ProjectStatus>(dto.ProjectStatus)
-        };
-        _context.Projects.Add(project);
-        _context.SaveChanges();
-        var response = new ProjectResponses()
-        {
-            ProjectId = project.ProjectId,
-            ProjectName = project.ProjectName,
-            ProjectStartDate = project.ProjectStartDate,
-            ProjectEndDate = project.ProjectEndDate,
-            ProjectPriority = project.ProjectPriority,
-            ProjectStatus = project.ProjectStatus.ToString()
-        };
+        var response = await _projectServices.CreateProjectAsync(dto);
         return Ok(response);
     }
     [HttpDelete]
