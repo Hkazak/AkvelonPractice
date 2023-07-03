@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Persistence.Models;
 
-public class Task
+public record Task
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid TaskId { get; init; }

@@ -1,8 +1,10 @@
 ﻿using Contracts.DTOs;
 using Contracts.Responses;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Context;
 using Persistence.Models;
+using TaskManager.Services;
 
 namespace TaskManager.Controllers;
 
@@ -11,6 +13,7 @@ namespace TaskManager.Controllers;
 public class ProjectController : ControllerBase
 {   
      private readonly TaskManagerContext _context;
+     private readonly ProjectServices _management;
 
     public ProjectController(TaskManagerContext context)
     {
@@ -18,7 +21,12 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult CreateProject([FromBody] ProjectDTO dto)
+    public async Task<ActionResult<Task<Project>>> CreateProject([FromBody] ProjectDTO dto)
+    {
+        var response = _management.CreateProject(dto);
+        return Ok(response);
+    }
+    public ActionResult CreatePdroject([FromBody] ProjectDTO dto)
     {
         var project = new Project
         {

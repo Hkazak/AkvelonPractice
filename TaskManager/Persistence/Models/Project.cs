@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Persistence.Models;
 
-public class Project
+public record Project
 {
     [Key,  DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid ProjectId { get; init; }
