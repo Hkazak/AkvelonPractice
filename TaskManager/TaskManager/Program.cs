@@ -75,6 +75,7 @@ builder.Services.AddDbContext<TaskManagerContext>((options) =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionsString"));
 });
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

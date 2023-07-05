@@ -28,54 +28,24 @@ public class ProjectController : ControllerBase
     }
     [HttpDelete]
     [Route("id/{id}")]
-    public ActionResult DeleteProject([FromRoute] Guid id)
+    public async Task<ActionResult> DeleteProject([FromRoute] Guid id)
     {
-        var project = _context.Projects.FirstOrDefault(x => x.ProjectId == id);
-        if (project is null)
-        {
-            throw new Exception($"Project with ID {id} not found");
-        }
-
-        _context.Projects.Remove(project);
-        _context.SaveChanges();
+        await _projectServices.DeleteProjectAsync(id);
         return NoContent();
     }
 
     [HttpPut]
     [Route("id/{id}/status/{status}")]
-    public ActionResult EditProject([FromRoute] string status,[FromRoute]Guid id)
+    public async Task<ActionResult> EditProject([FromRoute] string status,[FromRoute]Guid id)
     {
-        var project = _context.Projects.FirstOrDefault(x => x.ProjectId == id);
-        if (project is null)
-        {
-            throw new Exception($"Project with ID {id} not found");
-        }
-
-        project.ProjectStatus = Enum.Parse<ProjectStatus>(status);
-        _context.Projects.Update(project);
-        _context.SaveChanges();
+        var project = await _projectServices.EditProjectAsync(status, id);
         return Ok(project);
     }
 
     [HttpGet]
-    public ActionResult<List<ProjectResponses>> GetAllProjects()
+    public async Task<ActionResult<List<ProjectResponses>>> GetAllProjects()
     {
-        var result = _context.Projects.ToList();
-        var response = new List<ProjectResponses>();
-        foreach (var project in result)
-        {
-            var projectResponse = new ProjectResponses
-            {
-                ProjectId = project.ProjectId,
-                ProjectName = project.ProjectName,
-                ProjectStartDate = project.ProjectStartDate,
-                ProjectEndDate = project.ProjectEndDate,
-                ProjectPriority = project.ProjectPriority,
-                ProjectStatus = project.ProjectStatus.ToString()
-            };
-            
-            response.Add(projectResponse);
-        }
+        var response = await _projectServices.GetAllProjectsAsync();
         return Ok(response);
     }
 
