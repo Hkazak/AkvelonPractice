@@ -2,6 +2,7 @@
 using Contracts.Responses;
 using Persistence.Context;
 using Persistence.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace TaskManager.Services;
 
@@ -18,6 +19,7 @@ public class UserServices
     {
         var user = new User
         {
+            UserId = Guid.NewGuid(),
             UserName = dto.UserName,
             UserSurename = dto.UserSureName,
             UserPassword = dto.UserPassword
@@ -26,6 +28,7 @@ public class UserServices
         await _context.SaveChangesAsync();
         var response = new UserResponses
         {
+            UserId = user.UserId,
             UserName = user.UserName,
             UserSurename = user.UserSurename,
             UserPassword = user.UserPassword
@@ -33,7 +36,7 @@ public class UserServices
         return response;
     }
 
-    public async Task<UserResponses> DeleteUserAsync(Guid id)
+    public async Task DeleteUserAsync(Guid id)
     {
         var user = _context.Users.FirstOrDefault(x => x.UserId == id);
         if (user is null)
@@ -43,7 +46,7 @@ public class UserServices
 
         _context.Users.Remove(user);
         await _context.SaveChangesAsync();
-        return null;    
     }
+    
     
 }

@@ -1,3 +1,3 @@
 ﻿namespace Contracts.DTOs;
 
-public record ProjectDTO(Guid ProjectId, string ProjectName, DateTime ProjectStartDate, DateTime ProjectEndDate, int ProjectPriority, string ProjectStatus, Guid UserId);
+public record ProjectDTO( string ProjectName, DateTime ProjectStartDate, DateTime ProjectEndDate, int ProjectPriority, string ProjectStatus, Guid UserId);

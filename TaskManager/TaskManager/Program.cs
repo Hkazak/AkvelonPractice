@@ -8,45 +8,38 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using TaskManager.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            // указывает, будет ли валидироваться издатель при валидации токена
             ValidateIssuer = true,
-            // строка, представляющая издателя
             ValidIssuer = AuthOptions.ISSUER,
-            // будет ли валидироваться потребитель токена
             ValidateAudience = true,
-            // установка потребителя токена
             ValidAudience = AuthOptions.AUDIENCE,
-            // будет ли валидироваться время существования
             ValidateLifetime = true,
-            // установка ключа безопасности
             IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-            // валидация ключа безопасности
             ValidateIssuerSigningKey = true,
         };
     });
+builder.Services.AddScoped<UserServices>();
+builder.Services.AddScoped<ProjectServices>();
+builder.Services.AddScoped<TaskService>();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(swagger =>
 {
-    //This is to generate the Default UI of Swagger Documentation
     swagger.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
         Title = "JWT Token Authentication API",
         Description = "ASP.NET Core 5.0 Web API"
     });
-    // To Enable authorization using Swagger (JWT)
     swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Name = "Authorization",
@@ -78,7 +71,6 @@ builder.Services.AddDbContext<TaskManagerContext>((options) =>
 builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -97,9 +89,9 @@ app.Run();
 
 public class AuthOptions
 {
-    public const string ISSUER = "MyAuthServer"; // издатель токена
-    public const string AUDIENCE = "MyAuthClient"; // потребитель токена
-    const string KEY = "mysupersecret_secretkey!123";   // ключ для шифрации
+    public const string ISSUER = "MyAuthServer"; 
+    public const string AUDIENCE = "MyAuthClient"; 
+    const string KEY = "mysupersecret_secretkey!123";   
     public static SymmetricSecurityKey GetSymmetricSecurityKey() => 
         new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
 }

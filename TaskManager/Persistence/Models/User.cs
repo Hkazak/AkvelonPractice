@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Persistence.Models;
 
-public class User : IdentityUser
+public class User 
 { 
     [Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid UserId { get; init; }

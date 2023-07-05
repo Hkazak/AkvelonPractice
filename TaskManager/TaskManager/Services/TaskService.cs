@@ -29,6 +29,7 @@ public class TaskService
             TaskDescription = dto.TaskDescription,
             TaskPriority = dto.TaskPriority,
             TaskName = dto.TaskName,
+            TaskDeadline = dto.TaskDeadline,
             TaskStatus = Enum.Parse<Persistence.Models.TaskStatus>(dto.TaskStatus),
             Project = project
         };
@@ -45,8 +46,8 @@ public class TaskService
         };
         return response;
     }
-    
-    public async Task<TaskResponses> DeleteTaskAsync(Guid id)
+
+    public async System.Threading.Tasks.Task DeleteTaskAsync(Guid id)
     {
         var task = _context.Tasks.FirstOrDefault(x => x.TaskId == id);
         if (task is null)
@@ -56,7 +57,6 @@ public class TaskService
 
         _context.Tasks.Remove(task);
         await _context.SaveChangesAsync();
-        return null;
     }
        
     public async Task<Task> EditTaskAsync(string status, Guid id )
@@ -67,7 +67,7 @@ public class TaskService
             throw new Exception($"Task with ID {id} not found");
         }
 
-        task.TaskStatus = (TaskStatus)Enum.Parse<System.Threading.Tasks.TaskStatus>(status);
+        task.TaskStatus = Enum.Parse<TaskStatus>(status);
         _context.Tasks.Update(task);
         await _context.SaveChangesAsync();
         return task;
@@ -75,23 +75,23 @@ public class TaskService
     
     public async Task<List<TaskResponses>> GetAllTasksAsync()
     {
-        var result = _context.Tasks.Include(x => x.Project).ToList();
-                var response = new List<TaskResponses>();
-                foreach (var task in result)
-                {
-                    var taskResponse = new TaskResponses
-                    {
-                        TaskId = task.TaskId,
-                        TaskName = task.TaskName,
-                        TaskPriority = task.TaskPriority,
-                        TaskDescription = task.TaskDescription,
-                        TaskStatus = task.TaskStatus.ToString(),
-                        ProjectId = task.Project.ProjectId
-                    };
-                    
-                    response.Add(taskResponse);
-                }
-                return response;
+        var result =await _context.Tasks.Include(x => x.Project).ToListAsync();
+        var response = new List<TaskResponses>(); 
+        foreach (var task in result)
+        {
+            var taskResponse = new TaskResponses
+            {
+                TaskId = task.TaskId,
+                TaskName = task.TaskName,
+                TaskPriority = task.TaskPriority,
+                TaskDescription = task.TaskDescription,
+                TaskStatus = task.TaskStatus.ToString(),
+                ProjectId = task.Project.ProjectId
+            };
+            
+            response.Add(taskResponse);
+        }
+        return response;
     }
  
 }

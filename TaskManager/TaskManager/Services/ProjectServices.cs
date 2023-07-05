@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic.CompilerServices;
 using Persistence.Context;
 using Persistence.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace TaskManager.Services;
 
@@ -25,7 +26,8 @@ public class ProjectServices
             ProjectStartDate = dto.ProjectStartDate,
             ProjectEndDate = dto.ProjectEndDate,
             ProjectPriority = dto.ProjectPriority,
-            ProjectStatus = Enum.Parse<ProjectStatus>(dto.ProjectStatus)
+            ProjectStatus = Enum.Parse<ProjectStatus>(dto.ProjectStatus),
+            UserId = dto.UserId
         };
         _context.Projects.Add(project);
         await _context.SaveChangesAsync();
@@ -41,7 +43,7 @@ public class ProjectServices
         return response;
     }
 
-    public async Task<ProjectResponses> DeleteProjectAsync(Guid id)
+    public async Task DeleteProjectAsync(Guid id)
     {
         var project = _context.Projects.FirstOrDefault(x => x.ProjectId == id);
         if (project is null)
@@ -51,7 +53,6 @@ public class ProjectServices
 
         _context.Projects.Remove(project);
         await _context.SaveChangesAsync();
-        return null;
     }
 
     public async Task<List<ProjectResponses>> GetAllProjectsAsync()
