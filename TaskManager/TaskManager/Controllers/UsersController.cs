@@ -3,6 +3,7 @@ using Contracts.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Context;
 using Persistence.Models;
+using TaskManager.Services;
 
 
 namespace TaskManager.Controllers;
@@ -11,30 +12,26 @@ namespace TaskManager.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly TaskManagerContext _context;
+    private readonly UserServices _userServices;
 
-    public UsersController(TaskManagerContext context)
+    public UsersController(TaskManagerContext context, UserServices userServices)
     {
         _context = context;
+        _userServices = userServices;
     }
 
     [HttpPost]
-    public ActionResult CreateUser([FromBody] UserDTO dto)
+    public async Task<ActionResult<UserResponses>> CreateUser([FromBody] UserDTO dto)
     {
-        var user = new User()
-        {
-            UserName = dto.UserName,
-            UserSurename = dto.UserSureName,
-            UserPassword = dto.UserPassword
-        };
-        _context.Users.Add(user);
-        _context.SaveChanges();
-        var response = new UserResponses()
-        {
-            UserId = user.UserId,
-            UserName = user.UserName,
-            UserSurename = user.UserSurename,
-            UserPassword = user.UserPassword
-        };
+        var response = await _userServices.CreateUserAsync(dto);
         return Ok(response);
     }
+    
+    [HttpDelete]
+    public async Task<ActionResult> DeleteUser([FromRoute] Guid id)
+    {
+        await _userServices.DeleteUserAsync(id);
+        return NoContent();
+    }
+    
 }
